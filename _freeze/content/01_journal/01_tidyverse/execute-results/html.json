@@ -1,7 +1,7 @@
 {
-  "hash": "92b22ec7106d07fa05fa9bced0b17da1",
+  "hash": "0c3af81f25c6495fbc29e2f44b45d1b2",
   "result": {
-    "markdown": "---\ntitle: \"Tidyverse\"\nauthor: \"Joschka Schwarz\"\n---\n\n\n::: callout-note\nTidyverse Challenge\n:::\n\n\n\n\n\n\n# Challenge\n\nLast compiled: 2023-08-08\n\n\n\n\n\n \n\n## Sales By State\n\n\n::: {.cell hash='01_tidyverse_cache/html/unnamed-chunk-2_e50bb247eb1fbe4edf96207d9eb438fd'}\n::: {.cell-output-display}\n![](01_tidyverse_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\nYou can add more headers by adding more hashtags. These won't be put into the table of contents\n\n### Sales By State and year\n\n::: {.cell hash='01_tidyverse_cache/html/unnamed-chunk-3_a03923c3884829debc07b3feb2331ad8'}\n::: {.cell-output-display}\n![](01_tidyverse_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\n\n\n\nLast compiled: 2023-08-08\n\n\n\n::: {.cell hash='01_tidyverse_cache/html/unnamed-chunk-4_47d820cc98ab70d43f82d5157c22e9a7'}\n\n:::\n",
+    "markdown": "---\ntitle: \"Tidyverse\"\nauthor: \"Hrishabh Shetty\"\n---\n\n\n::: callout-note\nTidyverse Challenge\n:::\n\n\n\n\n\n\n# Challenge\n\nLast compiled: 2023-08-09\n\n\n\n\n\n \n\n## Sales By State\n\n\n::: {.cell hash='01_tidyverse_cache/html/unnamed-chunk-2_e50bb247eb1fbe4edf96207d9eb438fd'}\n::: {.cell-output-display}\n![](01_tidyverse_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\n\n### Sales By State and year\n\n::: {.cell hash='01_tidyverse_cache/html/unnamed-chunk-3_a03923c3884829debc07b3feb2331ad8'}\n::: {.cell-output-display}\n![](01_tidyverse_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\n\n\n\nLast compiled: 2023-08-09\n\n\n\n::: {.cell hash='01_tidyverse_cache/html/unnamed-chunk-4_47d820cc98ab70d43f82d5157c22e9a7'}\n\n:::\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

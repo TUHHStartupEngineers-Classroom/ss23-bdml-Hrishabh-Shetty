@@ -1,6 +1,6 @@
 ---
 title: "Data Wrangling"
-author: "Joschka Schwarz"
+author: "Hrishabh Shetty"
 ---
 
 ::: callout-note

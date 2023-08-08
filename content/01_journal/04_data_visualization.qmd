@@ -1,13 +1,13 @@
 ---
 title: "Data Visualization"
-author: "Joschka Schwarz"
+author: "Hrishabh Shetty"
 ---
 
 ::: callout-note
 Visualization
 :::
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 

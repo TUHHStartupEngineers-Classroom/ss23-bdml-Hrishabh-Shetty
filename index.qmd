@@ -1,32 +1,14 @@
 ---
 title: "My Lab Journal"
 subtitle: "Business Data Science Basics"
-author: "Hrishabh Shetty 123"
+author: "Hrishabh Shetty "
 ---
 
 ![](assets/logo/TIE_logo.svg){width=80% fig-align="center"}
 
-This is a template example for lab journaling. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. Students can replace this text as they wish.
-
+This is my lab journal. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. 
 # How to use
 
-1. Accept the assignment and get your own github repo.
+1. Go to the journal option  at the top of the website
 
-2. Blog/journal what you are doing in R, by editing the `.qmd` files. 
-
-3. See the links page for lots of helpful links on learning R.
-
-4. Change everything to make it your own.
-
-5. Make sure to render you website everytime before you want to upload changes
-
-```{r}
-#| echo: true
-numbers <- 1:1000
-
-# This will print the first 10 elements of the vector numbers
-numbers[1:10]
-
-# This will plot a histogram of 100 random elements of the vector numbers
-hist(sample(numbers, 100, replace = T))
-```
+2. Browse through some of the Data Science Projects in the diferent sections
