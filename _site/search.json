@@ -1,5 +1,110 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "My Lab Journal",
+    "section": "",
+    "text": "This is my lab journal. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. # How to use\n\nGo to the journal option at the top of the website\nBrowse through some of the Data Science Projects in the diferent sections"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html",
+    "href": "content/01_journal/03_data_wrangling.html",
+    "title": "Data Wrangling",
+    "section": "",
+    "text": "Note\n\n\n\nData Wrangling\n#load the tables\n\nlibrary(tidyverse)\n\n#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n#&gt; ✔ dplyr     1.1.2     ✔ readr     2.1.4\n#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.0\n#&gt; ✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n#&gt; ✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n#&gt; ✔ purrr     1.0.1     \n#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n#&gt; ✖ dplyr::filter() masks stats::filter()\n#&gt; ✖ dplyr::lag()    masks stats::lag()\n#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(vroom)\n\n#&gt; \n#&gt; Attaching package: 'vroom'\n#&gt; \n#&gt; The following objects are masked from 'package:readr':\n#&gt; \n#&gt;     as.col_spec, col_character, col_date, col_datetime, col_double,\n#&gt;     col_factor, col_guess, col_integer, col_logical, col_number,\n#&gt;     col_skip, col_time, cols, cols_condense, cols_only, date_names,\n#&gt;     date_names_lang, date_names_langs, default_locale, fwf_cols,\n#&gt;     fwf_empty, fwf_positions, fwf_widths, locale, output_column,\n#&gt;     problems, spec\n\nlibrary(lubridate)\nlibrary(data.table)\n\n#&gt; \n#&gt; Attaching package: 'data.table'\n#&gt; \n#&gt; The following objects are masked from 'package:lubridate':\n#&gt; \n#&gt;     hour, isoweek, mday, minute, month, quarter, second, wday, week,\n#&gt;     yday, year\n#&gt; \n#&gt; The following objects are masked from 'package:dplyr':\n#&gt; \n#&gt;     between, first, last\n#&gt; \n#&gt; The following object is masked from 'package:purrr':\n#&gt; \n#&gt;     transpose\n\n# load the column list\ncol_types_patent &lt;- list(\n  id = col_character(),\n  date = col_date(\"%Y-%m-%d\"),\n  num_claims = col_double()\n  )\n\ncol_types_patent_asignee &lt;- list(\n  patent_id = col_character(),\n  assignee_id = col_character()\n  )\n\ncol_types_asignee &lt;- list(\n  id = col_character(),\n  type = col_double(),\n  organization = col_character()\n  )\n\ncol_types_uspc &lt;- list(\n  patent_id = col_character(),\n  mainclass_id = col_character(),\n  sequence = col_double()\n  )\n\n#Acquire data from the files\npatent_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/patent.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_patent,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\npatent_asignee_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/patent_assignee.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_patent_asignee,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\nasignee_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/assignee.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_asignee,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\nuspc_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/uspc.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_uspc,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\n#Convert the aquired data to data table\nsetDT(patent_tbl)\nsetDT(patent_asignee_tbl)\nsetDT(asignee_tbl)\nsetDT(uspc_tbl)\n\n#merge asignee data\ncombined_asignee_data &lt;- merge(x=patent_asignee_tbl,y=asignee_tbl,\n                               by.x=\"assignee_id\",\n                               by.y = \"id\",\n                               all.x = TRUE,\n                               all.y = FALSE)"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-10-us-orgs-with-most-patentstype-2-is-for-us-companies",
+    "href": "content/01_journal/03_data_wrangling.html#top-10-us-orgs-with-most-patentstype-2-is-for-us-companies",
+    "title": "Data Wrangling",
+    "section": "1 Top 10 US Orgs with most patents#type 2 is for US Companies",
+    "text": "1 Top 10 US Orgs with most patents#type 2 is for US Companies\n\n#Top 10 US Orgs with most patents#type 2 is for US Companies\ncombined_asignee_data[type==2,.N,by=organization][order( \n  N,decreasing = TRUE)]%&gt;% \n  slice(1:10)"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#us-orgs-with-most-patents-in-aug-2014",
+    "href": "content/01_journal/03_data_wrangling.html#us-orgs-with-most-patents-in-aug-2014",
+    "title": "Data Wrangling",
+    "section": "2 US Orgs with most patents in Aug 2014",
+    "text": "2 US Orgs with most patents in Aug 2014\n\ncombined_patent_data &lt;- merge(x=patent_tbl,y=combined_asignee_data,\n                              by.x = \"id\",\n                              by.y = \"patent_id\",\n                              all.x = TRUE,\n                              all.y = FALSE) %&gt;% filter(!is.na(assignee_id))\n\n\nsetnames(combined_patent_data,\"date\",\"GrantDate\")\n\n\n#US Orgs with most patents in Aug 2014\nMostPatentsAugust14 &lt;- combined_patent_data[month(GrantDate)==8 & type==2,.N,by=organization][order(\n  N,decreasing = TRUE)] %&gt;% head(1)\nMostPatentsAugust14"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-10-companies-with-most-new-patents-august-2014",
+    "href": "content/01_journal/03_data_wrangling.html#top-10-companies-with-most-new-patents-august-2014",
+    "title": "Data Wrangling",
+    "section": "3 Top 10 Companies with Most New Patents August 2014",
+    "text": "3 Top 10 Companies with Most New Patents August 2014\n\nT10_Latest_patents &lt;- combined_patent_data[month(GrantDate)==8&type==2,.N,by=.(GrantDate,organization)][order(GrantDate,N,decreasing = TRUE)] %&gt;% \n  slice(1:10)\nT10_Latest_patents"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#most-innovative-tech-sector",
+    "href": "content/01_journal/03_data_wrangling.html#most-innovative-tech-sector",
+    "title": "Data Wrangling",
+    "section": "4 Most Innovative Tech Sector",
+    "text": "4 Most Innovative Tech Sector\nHere I have given the Class ID of the most innovative Tech Sector\n\n#combine uspc_tbl with asignee_tbl and patent_asignee_tbl\nuspc_combined &lt;- merge(x=uspc_tbl,y=combined_asignee_data,\n                       by=\"patent_id\",\n                       all.x=TRUE,\n                       all.y = FALSE)  %&gt;% filter(!is.na(assignee_id))  \n#most innovative tech category is the class with most patents\nmost_innovative &lt;- uspc_combined[,.N,by=mainclass_id][order(N,decreasing = TRUE)] %&gt;% head(1)\nmost_innovative"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-10-orgs-with-the-most-patents-worldwide",
+    "href": "content/01_journal/03_data_wrangling.html#top-10-orgs-with-the-most-patents-worldwide",
+    "title": "Data Wrangling",
+    "section": "5 Top 10 orgs with the most patents worldwide",
+    "text": "5 Top 10 orgs with the most patents worldwide\n\n#top 10 orgs with the most patents\ntop10Worldwide &lt;- uspc_combined[type==3|type==2,.N,by=.(organization)][order(N,decreasing = TRUE)] %&gt;% slice(1:10)\ntop10Worldwide\n\n\n\n  \n\n\n#vector of the top 10 orgs\ntop10orgs &lt;-top10Worldwide %&gt;%  pull(organization)\ntop10orgs\n\n#&gt;  [1] \"International Business Machines Corporation\"\n#&gt;  [2] \"Samsung Electronics Co., Ltd.\"              \n#&gt;  [3] \"Canon Kabushiki Kaisha\"                     \n#&gt;  [4] \"Sony Corporation\"                           \n#&gt;  [5] \"QUALCOMM Incorporated\"                      \n#&gt;  [6] \"Microsoft Corporation\"                      \n#&gt;  [7] \"Kabushiki Kaisha Toshiba\"                   \n#&gt;  [8] \"Google Inc.\"                                \n#&gt;  [9] \"LG Electronics Inc.\"                        \n#&gt; [10] \"Panasonic Corporation\""
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide",
+    "href": "content/01_journal/03_data_wrangling.html#top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide",
+    "title": "Data Wrangling",
+    "section": "6 top 5 USPTO tech main classes for the top 10 companies worldwide",
+    "text": "6 top 5 USPTO tech main classes for the top 10 companies worldwide\n\n#the classes of the the top 10 orgs\nuspc_combined[ifelse(organization %in% top10orgs,TRUE,FALSE),.N,by=mainclass_id][order(N,decreasing = TRUE)] %&gt;% \n  slice(1:5)"
+  },
+  {
+    "objectID": "content/01_journal/01_tidyverse.html",
+    "href": "content/01_journal/01_tidyverse.html",
+    "title": "Tidyverse",
+    "section": "",
+    "text": "Note\n\n\n\nTidyverse Challenge"
+  },
+  {
+    "objectID": "content/01_journal/01_tidyverse.html#sales-by-state",
+    "href": "content/01_journal/01_tidyverse.html#sales-by-state",
+    "title": "Tidyverse",
+    "section": "1.1 Sales By State",
+    "text": "1.1 Sales By State\n\n\n\n\n\n\n\n\n\n\nSales By State and year\n\n\n\n\n\n\n\n\n\nLast compiled: 2023-08-09"
+  },
+  {
+    "objectID": "content/01_journal/02_data_acquisition.html",
+    "href": "content/01_journal/02_data_acquisition.html",
+    "title": "Data Acquisition",
+    "section": "",
+    "text": "Note\n\n\n\nData Aquisition"
+  },
+  {
+    "objectID": "content/01_journal/02_data_acquisition.html#top-songs-for-taylor-swift-from-spotify",
+    "href": "content/01_journal/02_data_acquisition.html#top-songs-for-taylor-swift-from-spotify",
+    "title": "Data Acquisition",
+    "section": "1.1 Top Songs for Taylor Swift from Spotify",
+    "text": "1.1 Top Songs for Taylor Swift from Spotify\n\nlibrary(httr)\n#replace this with yours\nclientID = 'a8a4b01d406740f988365684cd610827'\nsecret = 'e63cc9177af64612a0d8445e37635e39'\nresponse = POST(\n  'https://accounts.spotify.com/api/token',\n  accept_json(),\n  authenticate(clientID, secret),\n  body = list(grant_type = 'client_credentials'),\n  encode = 'form',\n  verbose()\n)\nmytoken = content(response)$access_token\nHeaderValue = paste0('Bearer ', mytoken)\n\nalbumID = \"1NAmidJlEaVgA3MpcPFYGq\"\ntrack_URI = paste0('https://api.spotify.com/v1/albums/', albumID,'/tracks')\ntrack_response = GET(url = track_URI, add_headers(Authorization = HeaderValue))\ntracks = content(track_response)\n\nntracks = length(tracks$items)\ntracks_list&lt;-data.frame(\n  name=character(ntracks),\n  id=character(ntracks),\n  artist=character(ntracks),\n  disc_number=numeric(ntracks),\n  track_number=numeric(ntracks),\n  duration_ms=numeric(ntracks),\n  stringsAsFactors=FALSE\n)\n\nfor(i in 1:ntracks){\n  tracks_list[i,]$id &lt;- tracks$items[[i]]$id\n  tracks_list[i,]$name &lt;- tracks$items[[i]]$name\n  tracks_list[i,]$artist &lt;- tracks$items[[i]]$artists[[1]]$name\n  tracks_list[i,]$disc_number &lt;- tracks$items[[i]]$disc_number\n  tracks_list[i,]$track_number &lt;- tracks$items[[i]]$track_number\n  tracks_list[i,]$duration_ms &lt;- tracks$items[[i]]$duration_ms\n}\ntracks_list"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html",
+    "href": "content/01_journal/04_data_visualization.html",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "Note\n\n\n\nVisualization\nknitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#case-1-cumulative-cases-vs.-time",
+    "href": "content/01_journal/04_data_visualization.html#case-1-cumulative-cases-vs.-time",
+    "title": "Data Visualization",
+    "section": "1.1 Case 1: Cumulative Cases Vs. Time",
+    "text": "1.1 Case 1: Cumulative Cases Vs. Time\n\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(glue)\nlibrary(ggrepel)\ncovid_data_tbl &lt;- read_csv(\"https://covid.ourworldindata.org/data/owid-covid-data.csv\")\ncountries &lt;- c(\"Germany\",\"United Kingdom\",\"France\",\"Spain\",\"United States\",\"Europe\")\nlast_date &lt;- max(covid_data_tbl$date)\n#wrangling\ncumulative_cases_tbl &lt;- covid_data_tbl %&gt;% \n  select(location,date,total_cases) %&gt;%\n  filter(location %in% countries) %&gt;% filter(!is.na(total_cases)) #%&gt;% \n  # as_factor(location) %&gt;% fct_reorder(total_cases) #%&gt;% \n  #mutate(new_date=floor_date(date(date),unit = \"months\")) %&gt;% \n  # group_by(location) %&gt;% \n  # summarise(cum_cases=sum(new_cases)) %&gt;% \n  # mutate(month_year=glue('{format(new_date,\"%B %Y\")}'))\n  #ungroup()\n#visualization\ncumulative_cases_tbl$label &lt;- NA\ncumulative_cases_tbl$label[which((cumulative_cases_tbl$date == \n                                   max(cumulative_cases_tbl$date)))] &lt;- \n  cumulative_cases_tbl$total_cases[which(cumulative_cases_tbl$date==\n                                           max(cumulative_cases_tbl$date))]\ncumulative_cases_tbl %&gt;% \n  ggplot(aes(date,total_cases,color=location)) +\n  geom_line(size =1)+\n  scale_y_continuous(labels = scales::label_number(scale=1e-6,\n                                                    suffix=\"M\"))+\n  geom_label_repel(aes(label = label))+\n  scale_color_discrete(type = c(\"#E69F00\", \"#56B4E9\", \"#009E73\", \"#F0E442\", \"#0072B2\", \"#D55E00\", \"#CC79A7\"))+\n  labs(\n    title = \"COVID-19 confirmed cases worldwide\",\n    subtitle = glue(\"As of {last_date}\"), #vielleicht richtiges Datum eintragen\n    x = \"\",\n    y = \"Cumulative Cases\",\n    fill = \"location\",\n    caption = \"Europe Bypassed US in number of cumulative cases in the second half of 2020\"\n  )"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html#case-2-mortality-rate",
+    "href": "content/01_journal/04_data_visualization.html#case-2-mortality-rate",
+    "title": "Data Visualization",
+    "section": "1.2 Case 2: Mortality Rate",
+    "text": "1.2 Case 2: Mortality Rate\n\n# Case 2\n#Lat and Longitude Data for world\nworld &lt;- map_data(\"world\")\n\n#Calculate moratality rate\nmortality_rate_tbl &lt;- covid_data_tbl %&gt;% \n  select(location, date,new_deaths,population) %&gt;%filter(!is.na(new_deaths)) %&gt;%\n  filter(date&lt;=as.Date(\"2021-04-16\")) %&gt;% \n  mutate(mort_rate=new_deaths/population) %&gt;% \n  group_by(location) %&gt;% \n  summarise(mortality_rate=sum(mort_rate)) %&gt;% arrange(desc(mortality_rate))%&gt;% \n  mutate(location = case_when(\n    \n    location == \"United Kingdom\" ~ \"UK\",\n    location == \"United States\" ~ \"USA\",\n    location == \"Democratic Republic of Congo\" ~ \"Democratic Republic of the Congo\",\n    TRUE ~ location\n    \n  ))\nmapped_data &lt;- world %&gt;% left_join(mortality_rate_tbl,by=c(\"region\"=\"location\"))\nmapped_data %&gt;% \n  ggplot(aes(long,lat, mortality_rate))+\n  geom_map(aes(map_id=region, fill = mortality_rate ),map = mapped_data) +\n  scale_fill_continuous(low=\"red\", high=\"black\",\n                        labels = scales::label_number(scale  = 1e2,\n                                                      prefix = \"\",\n                                                      suffix = \"%\")) +\nlabs(\n  title = \"Confirmed COVID-19 deaths relative to the size of population\",\n  fill = \"mortality_rate\",\n  caption = max(covid_data_tbl$date)\n)"
+  },
+  {
     "objectID": "content/03_other/06_links.html",
     "href": "content/03_other/06_links.html",
     "title": "Links",
@@ -7,59 +112,17 @@
     "text": "R is a free open-source programming language that can be used for statistical analysis, data-simulation, graphing, and lots of other stuff. Another free program is R-studio, that provides a nice graphic interface for R. Download R first, then download R-studio. Both can run on PCs, Macs or Linux. Students will be learning R in the stats labs using the lab manual .\n\n\n\n\nGoogle is great, Google your problem\nStackoverflow is great, google will often take you there because someone has already asked your question, and someone else has answered, usually many people have answered your question many ways."
   },
   {
-    "objectID": "content/01_journal/03_data_wrangling.html",
-    "href": "content/01_journal/03_data_wrangling.html",
-    "title": "Data Wrangling",
+    "objectID": "content/03_other/06_links.html#r-and-r-studio",
+    "href": "content/03_other/06_links.html#r-and-r-studio",
+    "title": "Links",
     "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+    "text": "R is a free open-source programming language that can be used for statistical analysis, data-simulation, graphing, and lots of other stuff. Another free program is R-studio, that provides a nice graphic interface for R. Download R first, then download R-studio. Both can run on PCs, Macs or Linux. Students will be learning R in the stats labs using the lab manual ."
   },
   {
-    "objectID": "content/01_journal/04_data_visualization.html",
-    "href": "content/01_journal/04_data_visualization.html",
-    "title": "Data Visualization",
+    "objectID": "content/03_other/06_links.html#additional-r-resources",
+    "href": "content/03_other/06_links.html#additional-r-resources",
+    "title": "Links",
     "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
-  },
-  {
-    "objectID": "content/01_journal/01_tidyverse.html",
-    "href": "content/01_journal/01_tidyverse.html",
-    "title": "Tidyverse",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh.\nThis is a .qmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
-  },
-  {
-    "objectID": "content/01_journal/01_tidyverse.html#header-2",
-    "href": "content/01_journal/01_tidyverse.html#header-2",
-    "title": "Tidyverse",
-    "section": "\n2.1 Header 2",
-    "text": "2.1 Header 2\nHeader 3\nHeader 4\nHeader 5\nHeader 6"
-  },
-  {
-    "objectID": "content/01_journal/02_data_acquisition.html",
-    "href": "content/01_journal/02_data_acquisition.html",
-    "title": "Data Acquisition",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
-  },
-  {
-    "objectID": "content/02_notes/05_class_notes.html",
-    "href": "content/02_notes/05_class_notes.html",
-    "title": "Class Notes",
-    "section": "",
-    "text": "IMPORTANT: You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.\nThis is an .qmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "My Lab Journal",
-    "section": "",
-    "text": "This is a template example for lab journaling. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. Students can replace this text as they wish."
-  },
-  {
-    "objectID": "index.html#how-to-use",
-    "href": "index.html#how-to-use",
-    "title": "My Lab Journal",
-    "section": "How to use",
-    "text": "How to use\n\nAccept the assignment and get your own github repo.\nBlog/journal what you are doing in R, by editing the .qmd files.\nSee the links page for lots of helpful links on learning R.\nChange everything to make it your own.\nMake sure to render you website everytime before you want to upload changes"
+    "text": "Google is great, Google your problem\nStackoverflow is great, google will often take you there because someone has already asked your question, and someone else has answered, usually many people have answered your question many ways."
   }
 ]

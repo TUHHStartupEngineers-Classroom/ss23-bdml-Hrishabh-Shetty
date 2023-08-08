@@ -1,8 +1,115 @@
 ---
 title: "Data Acquisition"
-author: "Joschka Schwarz"
+author: "Hrishabh"
 ---
 
 ::: callout-note
-You can delete everything in here and start fresh.
+Data Aquisition
 :::
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
+
+```
+
+# Data Aquisition: API Challenge
+## Top Songs for Taylor Swift from Spotify
+
+```{r}
+library(httr)
+#replace this with yours
+clientID = 'a8a4b01d406740f988365684cd610827'
+secret = 'e63cc9177af64612a0d8445e37635e39'
+response = POST(
+  'https://accounts.spotify.com/api/token',
+  accept_json(),
+  authenticate(clientID, secret),
+  body = list(grant_type = 'client_credentials'),
+  encode = 'form',
+  verbose()
+)
+mytoken = content(response)$access_token
+HeaderValue = paste0('Bearer ', mytoken)
+
+albumID = "1NAmidJlEaVgA3MpcPFYGq"
+track_URI = paste0('https://api.spotify.com/v1/albums/', albumID,'/tracks')
+track_response = GET(url = track_URI, add_headers(Authorization = HeaderValue))
+tracks = content(track_response)
+
+ntracks = length(tracks$items)
+tracks_list<-data.frame(
+  name=character(ntracks),
+  id=character(ntracks),
+  artist=character(ntracks),
+  disc_number=numeric(ntracks),
+  track_number=numeric(ntracks),
+  duration_ms=numeric(ntracks),
+  stringsAsFactors=FALSE
+)
+
+for(i in 1:ntracks){
+  tracks_list[i,]$id <- tracks$items[[i]]$id
+  tracks_list[i,]$name <- tracks$items[[i]]$name
+  tracks_list[i,]$artist <- tracks$items[[i]]$artists[[1]]$name
+  tracks_list[i,]$disc_number <- tracks$items[[i]]$disc_number
+  tracks_list[i,]$track_number <- tracks$items[[i]]$track_number
+  tracks_list[i,]$duration_ms <- tracks$items[[i]]$duration_ms
+}
+tracks_list
+
+```
+
+# Data Aquisition: Web Scraping Challenge
+
+Last compiled: `r Sys.Date()`
+
+
+
+
+```{r}
+library(rvest)
+library(stringi)
+library(xopen)
+library(jsonlite)
+library(tidyverse)
+library(glue)
+
+url <- "https://www.radon-bikes.de"
+xopen(url)
+html_home <- read_html(url)
+#Get url fpr eacf of the product categories
+bike_category_url_tbl <- html_home %>% html_nodes(".megamenu__item") %>% html_elements("a") %>% 
+  html_attr('href') %>% enframe(name = 'position',value = 'title') %>% mutate(
+    category_url=glue("https://www.radon-bikes.de{title}")
+  ) %>% filter(position<9)#remove accessories and gears using filter
+
+
+
+#Get the Model Names
+get_bike_data <- function(link){
+  model_infor <- read_html(link) %>% html_nodes(".o-slick-slider__slide-content") %>% html_element("h2") %>% 
+    html_text() %>% enframe(name = "position",value = 'Model Name')
+  #Get the sizes
+  bike_sizes <- read_html(link) %>% html_nodes(".o-slick-slider__slide-content") %>% html_node('.m-bikegrid__size') %>% 
+    html_text() %>% str_extract("[0-9].+") %>% enframe(name = "position",value = "size")
+  #Get the prices
+  bike_prices <- read_html(link) %>% html_nodes(".m-serienpanel__price--active") %>% html_text() %>% 
+    str_remove("^ .$") %>%  stri_remove_empty() %>%  enframe(name='position',value = 'price')
+  #combine three using position
+   model_infor %>% left_join(bike_sizes) %>% left_join(bike_prices) %>%
+    filter(position!=23)
+}
+
+category_1 <-  bike_category_url_tbl$category_url[2] # Get the URl for 1st category
+bike_model  <- get_bike_data(link = category_1)
+
+bike_category_url_vector <- bike_category_url_tbl %>% pull(category_url) #Creates a vector with all the urls
+bike_data_lst <- map(bike_category_url_vector,get_bike_data) # repeats the function for each of the urls
+bike_data_tbl <- bind_rows(bike_data_lst) %>% rowid_to_column(var = "ID") %>% 
+  separate(col = price,sep = " ",into = c("price", "price_2")) %>% 
+  select(-price_2)#generates tibble with all the data
+bike_data_tbl %>% head(10)
+```
+
