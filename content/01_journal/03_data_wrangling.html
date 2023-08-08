@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -63,6 +97,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+
+<link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
 </head>
@@ -132,7 +169,18 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#top-10-us-orgs-with-most-patentstype-2-is-for-us-companies" id="toc-top-10-us-orgs-with-most-patentstype-2-is-for-us-companies" class="nav-link active" data-scroll-target="#top-10-us-orgs-with-most-patentstype-2-is-for-us-companies"><span class="header-section-number">1</span> Top 10 US Orgs with most patents#type 2 is for US Companies</a></li>
+  <li><a href="#us-orgs-with-most-patents-in-aug-2014" id="toc-us-orgs-with-most-patents-in-aug-2014" class="nav-link" data-scroll-target="#us-orgs-with-most-patents-in-aug-2014"><span class="header-section-number">2</span> US Orgs with most patents in Aug 2014</a></li>
+  <li><a href="#top-10-companies-with-most-new-patents-august-2014" id="toc-top-10-companies-with-most-new-patents-august-2014" class="nav-link" data-scroll-target="#top-10-companies-with-most-new-patents-august-2014"><span class="header-section-number">3</span> Top 10 Companies with Most New Patents August 2014</a></li>
+  <li><a href="#most-innovative-tech-sector" id="toc-most-innovative-tech-sector" class="nav-link" data-scroll-target="#most-innovative-tech-sector"><span class="header-section-number">4</span> Most Innovative Tech Sector</a></li>
+  <li><a href="#top-10-orgs-with-the-most-patents-worldwide" id="toc-top-10-orgs-with-the-most-patents-worldwide" class="nav-link" data-scroll-target="#top-10-orgs-with-the-most-patents-worldwide"><span class="header-section-number">5</span> Top 10 orgs with the most patents worldwide</a></li>
+  <li><a href="#top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide" id="toc-top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide" class="nav-link" data-scroll-target="#top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide"><span class="header-section-number">6</span> top 5 USPTO tech main classes for the top 10 companies worldwide</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -170,11 +218,255 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You can delete everything in here and start fresh.</p>
+<p>Data Wrangling</p>
+</div>
+</div>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-1_5f019da9427f61a258c5dfe155713c1a">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#load the tables</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+#&gt; ✔ dplyr     1.1.2     ✔ readr     2.1.4
+#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.0
+#&gt; ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+#&gt; ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+#&gt; ✔ purrr     1.0.1     
+#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+#&gt; ✖ dplyr::filter() masks stats::filter()
+#&gt; ✖ dplyr::lag()    masks stats::lag()
+#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(vroom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; 
+#&gt; Attaching package: 'vroom'
+#&gt; 
+#&gt; The following objects are masked from 'package:readr':
+#&gt; 
+#&gt;     as.col_spec, col_character, col_date, col_datetime, col_double,
+#&gt;     col_factor, col_guess, col_integer, col_logical, col_number,
+#&gt;     col_skip, col_time, cols, cols_condense, cols_only, date_names,
+#&gt;     date_names_lang, date_names_langs, default_locale, fwf_cols,
+#&gt;     fwf_empty, fwf_positions, fwf_widths, locale, output_column,
+#&gt;     problems, spec</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">library</span>(data.table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; 
+#&gt; Attaching package: 'data.table'
+#&gt; 
+#&gt; The following objects are masked from 'package:lubridate':
+#&gt; 
+#&gt;     hour, isoweek, mday, minute, month, quarter, second, wday, week,
+#&gt;     yday, year
+#&gt; 
+#&gt; The following objects are masked from 'package:dplyr':
+#&gt; 
+#&gt;     between, first, last
+#&gt; 
+#&gt; The following object is masked from 'package:purrr':
+#&gt; 
+#&gt;     transpose</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># load the column list</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>col_types_patent <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="at">id =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="at">date =</span> <span class="fu">col_date</span>(<span class="st">"%Y-%m-%d"</span>),</span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="at">num_claims =</span> <span class="fu">col_double</span>()</span>
+<span id="cb7-6"><a href="#cb7-6"></a>  )</span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a>col_types_patent_asignee <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-9"><a href="#cb7-9"></a>  <span class="at">patent_id =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb7-10"><a href="#cb7-10"></a>  <span class="at">assignee_id =</span> <span class="fu">col_character</span>()</span>
+<span id="cb7-11"><a href="#cb7-11"></a>  )</span>
+<span id="cb7-12"><a href="#cb7-12"></a></span>
+<span id="cb7-13"><a href="#cb7-13"></a>col_types_asignee <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-14"><a href="#cb7-14"></a>  <span class="at">id =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb7-15"><a href="#cb7-15"></a>  <span class="at">type =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb7-16"><a href="#cb7-16"></a>  <span class="at">organization =</span> <span class="fu">col_character</span>()</span>
+<span id="cb7-17"><a href="#cb7-17"></a>  )</span>
+<span id="cb7-18"><a href="#cb7-18"></a></span>
+<span id="cb7-19"><a href="#cb7-19"></a>col_types_uspc <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-20"><a href="#cb7-20"></a>  <span class="at">patent_id =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb7-21"><a href="#cb7-21"></a>  <span class="at">mainclass_id =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb7-22"><a href="#cb7-22"></a>  <span class="at">sequence =</span> <span class="fu">col_double</span>()</span>
+<span id="cb7-23"><a href="#cb7-23"></a>  )</span>
+<span id="cb7-24"><a href="#cb7-24"></a></span>
+<span id="cb7-25"><a href="#cb7-25"></a><span class="co">#Acquire data from the files</span></span>
+<span id="cb7-26"><a href="#cb7-26"></a>patent_tbl <span class="ot">&lt;-</span> <span class="fu">vroom</span>(</span>
+<span id="cb7-27"><a href="#cb7-27"></a>  <span class="at">file       =</span> <span class="st">"Patent_data_reduced/patent.tsv"</span>, </span>
+<span id="cb7-28"><a href="#cb7-28"></a>  <span class="at">delim      =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, </span>
+<span id="cb7-29"><a href="#cb7-29"></a>  <span class="at">col_types  =</span> col_types_patent,</span>
+<span id="cb7-30"><a href="#cb7-30"></a>  <span class="at">na         =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"NULL"</span>)</span>
+<span id="cb7-31"><a href="#cb7-31"></a>  )</span>
+<span id="cb7-32"><a href="#cb7-32"></a></span>
+<span id="cb7-33"><a href="#cb7-33"></a>patent_asignee_tbl <span class="ot">&lt;-</span> <span class="fu">vroom</span>(</span>
+<span id="cb7-34"><a href="#cb7-34"></a>  <span class="at">file       =</span> <span class="st">"Patent_data_reduced/patent_assignee.tsv"</span>, </span>
+<span id="cb7-35"><a href="#cb7-35"></a>  <span class="at">delim      =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, </span>
+<span id="cb7-36"><a href="#cb7-36"></a>  <span class="at">col_types  =</span> col_types_patent_asignee,</span>
+<span id="cb7-37"><a href="#cb7-37"></a>  <span class="at">na         =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"NULL"</span>)</span>
+<span id="cb7-38"><a href="#cb7-38"></a>  )</span>
+<span id="cb7-39"><a href="#cb7-39"></a></span>
+<span id="cb7-40"><a href="#cb7-40"></a>asignee_tbl <span class="ot">&lt;-</span> <span class="fu">vroom</span>(</span>
+<span id="cb7-41"><a href="#cb7-41"></a>  <span class="at">file       =</span> <span class="st">"Patent_data_reduced/assignee.tsv"</span>, </span>
+<span id="cb7-42"><a href="#cb7-42"></a>  <span class="at">delim      =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, </span>
+<span id="cb7-43"><a href="#cb7-43"></a>  <span class="at">col_types  =</span> col_types_asignee,</span>
+<span id="cb7-44"><a href="#cb7-44"></a>  <span class="at">na         =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"NULL"</span>)</span>
+<span id="cb7-45"><a href="#cb7-45"></a>  )</span>
+<span id="cb7-46"><a href="#cb7-46"></a></span>
+<span id="cb7-47"><a href="#cb7-47"></a>uspc_tbl <span class="ot">&lt;-</span> <span class="fu">vroom</span>(</span>
+<span id="cb7-48"><a href="#cb7-48"></a>  <span class="at">file       =</span> <span class="st">"Patent_data_reduced/uspc.tsv"</span>, </span>
+<span id="cb7-49"><a href="#cb7-49"></a>  <span class="at">delim      =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, </span>
+<span id="cb7-50"><a href="#cb7-50"></a>  <span class="at">col_types  =</span> col_types_uspc,</span>
+<span id="cb7-51"><a href="#cb7-51"></a>  <span class="at">na         =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"NULL"</span>)</span>
+<span id="cb7-52"><a href="#cb7-52"></a>  )</span>
+<span id="cb7-53"><a href="#cb7-53"></a></span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="co">#Convert the aquired data to data table</span></span>
+<span id="cb7-55"><a href="#cb7-55"></a><span class="fu">setDT</span>(patent_tbl)</span>
+<span id="cb7-56"><a href="#cb7-56"></a><span class="fu">setDT</span>(patent_asignee_tbl)</span>
+<span id="cb7-57"><a href="#cb7-57"></a><span class="fu">setDT</span>(asignee_tbl)</span>
+<span id="cb7-58"><a href="#cb7-58"></a><span class="fu">setDT</span>(uspc_tbl)</span>
+<span id="cb7-59"><a href="#cb7-59"></a></span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="co">#merge asignee data</span></span>
+<span id="cb7-61"><a href="#cb7-61"></a>combined_asignee_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x=</span>patent_asignee_tbl,<span class="at">y=</span>asignee_tbl,</span>
+<span id="cb7-62"><a href="#cb7-62"></a>                               <span class="at">by.x=</span><span class="st">"assignee_id"</span>,</span>
+<span id="cb7-63"><a href="#cb7-63"></a>                               <span class="at">by.y =</span> <span class="st">"id"</span>,</span>
+<span id="cb7-64"><a href="#cb7-64"></a>                               <span class="at">all.x =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-65"><a href="#cb7-65"></a>                               <span class="at">all.y =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="top-10-us-orgs-with-most-patentstype-2-is-for-us-companies" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="top-10-us-orgs-with-most-patentstype-2-is-for-us-companies"><span class="header-section-number">1</span> Top 10 US Orgs with most patents#type 2 is for US Companies</h2>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-2_1cb78127607a2b8d9b48438b150a9048">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#Top 10 US Orgs with most patents#type 2 is for US Companies</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>combined_asignee_data[type<span class="sc">==</span><span class="dv">2</span>,.N,by<span class="ot">=</span>organization][<span class="fu">order</span>( </span>
+<span id="cb8-3"><a href="#cb8-3"></a>  N,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)]<span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["organization"],"name":[1],"type":["chr"],"align":["left"]},{"label":["N"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"International Business Machines Corporation","2":"7547"},{"1":"Microsoft Corporation","2":"3165"},{"1":"Google Inc.","2":"2668"},{"1":"QUALCOMM Incorporated","2":"2597"},{"1":"Apple Inc.","2":"2201"},{"1":"General Electric Company","2":"1873"},{"1":"Hewlett-Packard Development Company, L.P.","2":"1638"},{"1":"AT&T INTELLECTUAL PROPERTY I, L.P.","2":"1625"},{"1":"Intel Corporation","2":"1616"},{"1":"GM Global Technology Operations LLC","2":"1533"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="us-orgs-with-most-patents-in-aug-2014" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="us-orgs-with-most-patents-in-aug-2014"><span class="header-section-number">2</span> US Orgs with most patents in Aug 2014</h2>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-3_4db64b14bb4e1c98ca6e601b75d0e243">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>combined_patent_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x=</span>patent_tbl,<span class="at">y=</span>combined_asignee_data,</span>
+<span id="cb9-2"><a href="#cb9-2"></a>                              <span class="at">by.x =</span> <span class="st">"id"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3"></a>                              <span class="at">by.y =</span> <span class="st">"patent_id"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4"></a>                              <span class="at">all.x =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-5"><a href="#cb9-5"></a>                              <span class="at">all.y =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(assignee_id))</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="fu">setnames</span>(combined_patent_data,<span class="st">"date"</span>,<span class="st">"GrantDate"</span>)</span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#US Orgs with most patents in Aug 2014</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a>MostPatentsAugust14 <span class="ot">&lt;-</span> combined_patent_data[<span class="fu">month</span>(GrantDate)<span class="sc">==</span><span class="dv">8</span> <span class="sc">&amp;</span> type<span class="sc">==</span><span class="dv">2</span>,.N,by<span class="ot">=</span>organization][<span class="fu">order</span>(</span>
+<span id="cb9-13"><a href="#cb9-13"></a>  N,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)] <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">1</span>)</span>
+<span id="cb9-14"><a href="#cb9-14"></a>MostPatentsAugust14</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["organization"],"name":[1],"type":["chr"],"align":["left"]},{"label":["N"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"International Business Machines Corporation","2":"718"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="top-10-companies-with-most-new-patents-august-2014" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="top-10-companies-with-most-new-patents-august-2014"><span class="header-section-number">3</span> Top 10 Companies with Most New Patents August 2014</h2>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-4_411756c956cebb12508bf7eb665150f3">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>T10_Latest_patents <span class="ot">&lt;-</span> combined_patent_data[<span class="fu">month</span>(GrantDate)<span class="sc">==</span><span class="dv">8</span><span class="sc">&amp;</span>type<span class="sc">==</span><span class="dv">2</span>,.N,by<span class="ot">=</span>.(GrantDate,organization)][<span class="fu">order</span>(GrantDate,N,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)] <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>T10_Latest_patents</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["GrantDate"],"name":[1],"type":["date"],"align":["right"]},{"label":["organization"],"name":[2],"type":["chr"],"align":["left"]},{"label":["N"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"2014-08-26","2":"International Business Machines Corporation","3":"157"},{"1":"2014-08-26","2":"Microsoft Corporation","3":"78"},{"1":"2014-08-26","2":"Google Inc.","3":"73"},{"1":"2014-08-26","2":"Apple Inc.","3":"57"},{"1":"2014-08-26","2":"QUALCOMM Incorporated","3":"48"},{"1":"2014-08-26","2":"GM Global Technology Operations LLC","3":"42"},{"1":"2014-08-26","2":"General Electric Company","3":"41"},{"1":"2014-08-26","2":"Intel Corporation","3":"41"},{"1":"2014-08-26","2":"AT&T INTELLECTUAL PROPERTY I, L.P.","3":"37"},{"1":"2014-08-26","2":"Hewlett-Packard Development Company, L.P.","3":"30"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="most-innovative-tech-sector" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="most-innovative-tech-sector"><span class="header-section-number">4</span> Most Innovative Tech Sector</h2>
+<p>Here I have given the Class ID of the most innovative Tech Sector</p>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-5_63e0941457b63e8a19981dc0c2c874d6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">#combine uspc_tbl with asignee_tbl and patent_asignee_tbl</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>uspc_combined <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x=</span>uspc_tbl,<span class="at">y=</span>combined_asignee_data,</span>
+<span id="cb11-3"><a href="#cb11-3"></a>                       <span class="at">by=</span><span class="st">"patent_id"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4"></a>                       <span class="at">all.x=</span><span class="cn">TRUE</span>,</span>
+<span id="cb11-5"><a href="#cb11-5"></a>                       <span class="at">all.y =</span> <span class="cn">FALSE</span>)  <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(assignee_id))  </span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#most innovative tech category is the class with most patents</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>most_innovative <span class="ot">&lt;-</span> uspc_combined[,.N,by<span class="ot">=</span>mainclass_id][<span class="fu">order</span>(N,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)] <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">1</span>)</span>
+<span id="cb11-8"><a href="#cb11-8"></a>most_innovative</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["mainclass_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["N"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"257","2":"41500"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="top-10-orgs-with-the-most-patents-worldwide" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="top-10-orgs-with-the-most-patents-worldwide"><span class="header-section-number">5</span> Top 10 orgs with the most patents worldwide</h2>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-6_7b3590895c57dce6a108b130fee94f85">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">#top 10 orgs with the most patents</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>top10Worldwide <span class="ot">&lt;-</span> uspc_combined[type<span class="sc">==</span><span class="dv">3</span><span class="sc">|</span>type<span class="sc">==</span><span class="dv">2</span>,.N,by<span class="ot">=</span>.(organization)][<span class="fu">order</span>(N,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)] <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>top10Worldwide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["organization"],"name":[1],"type":["chr"],"align":["left"]},{"label":["N"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"International Business Machines Corporation","2":"19056"},{"1":"Samsung Electronics Co., Ltd.","2":"14523"},{"1":"Canon Kabushiki Kaisha","2":"9467"},{"1":"Sony Corporation","2":"8372"},{"1":"QUALCOMM Incorporated","2":"7322"},{"1":"Microsoft Corporation","2":"7195"},{"1":"Kabushiki Kaisha Toshiba","2":"6957"},{"1":"Google Inc.","2":"6082"},{"1":"LG Electronics Inc.","2":"5694"},{"1":"Panasonic Corporation","2":"5641"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#vector of the top 10 orgs</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>top10orgs <span class="ot">&lt;-</span>top10Worldwide <span class="sc">%&gt;%</span>  <span class="fu">pull</span>(organization)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>top10orgs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;  [1] "International Business Machines Corporation"
+#&gt;  [2] "Samsung Electronics Co., Ltd."              
+#&gt;  [3] "Canon Kabushiki Kaisha"                     
+#&gt;  [4] "Sony Corporation"                           
+#&gt;  [5] "QUALCOMM Incorporated"                      
+#&gt;  [6] "Microsoft Corporation"                      
+#&gt;  [7] "Kabushiki Kaisha Toshiba"                   
+#&gt;  [8] "Google Inc."                                
+#&gt;  [9] "LG Electronics Inc."                        
+#&gt; [10] "Panasonic Corporation"</code></pre>
+</div>
+</div>
+</section>
+<section id="top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide"><span class="header-section-number">6</span> top 5 USPTO tech main classes for the top 10 companies worldwide</h2>
+<div class="cell" data-hash="03_data_wrangling_cache/html/unnamed-chunk-7_25a3361bc5eea8656b1dbd070dd08ee4">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">#the classes of the the top 10 orgs</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>uspc_combined[<span class="fu">ifelse</span>(organization <span class="sc">%in%</span> top10orgs,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>),.N,by<span class="ot">=</span>mainclass_id][<span class="fu">order</span>(N,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)] <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["mainclass_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["N"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"257","2":"7979"},{"1":"455","2":"6191"},{"1":"370","2":"5483"},{"1":"348","2":"4113"},{"1":"709","2":"4018"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 </div>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
