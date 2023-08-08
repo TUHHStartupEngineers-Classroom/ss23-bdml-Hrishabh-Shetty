@@ -18,7 +18,49 @@
     "href": "content/01_journal/03_data_wrangling.html",
     "title": "Data Wrangling",
     "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+    "text": "Note\n\n\n\nData Wrangling\n#load the tables\n\nlibrary(tidyverse)\n\n#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n#&gt; ✔ dplyr     1.1.2     ✔ readr     2.1.4\n#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.0\n#&gt; ✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n#&gt; ✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n#&gt; ✔ purrr     1.0.1     \n#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n#&gt; ✖ dplyr::filter() masks stats::filter()\n#&gt; ✖ dplyr::lag()    masks stats::lag()\n#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(vroom)\n\n#&gt; \n#&gt; Attaching package: 'vroom'\n#&gt; \n#&gt; The following objects are masked from 'package:readr':\n#&gt; \n#&gt;     as.col_spec, col_character, col_date, col_datetime, col_double,\n#&gt;     col_factor, col_guess, col_integer, col_logical, col_number,\n#&gt;     col_skip, col_time, cols, cols_condense, cols_only, date_names,\n#&gt;     date_names_lang, date_names_langs, default_locale, fwf_cols,\n#&gt;     fwf_empty, fwf_positions, fwf_widths, locale, output_column,\n#&gt;     problems, spec\n\nlibrary(lubridate)\nlibrary(data.table)\n\n#&gt; \n#&gt; Attaching package: 'data.table'\n#&gt; \n#&gt; The following objects are masked from 'package:lubridate':\n#&gt; \n#&gt;     hour, isoweek, mday, minute, month, quarter, second, wday, week,\n#&gt;     yday, year\n#&gt; \n#&gt; The following objects are masked from 'package:dplyr':\n#&gt; \n#&gt;     between, first, last\n#&gt; \n#&gt; The following object is masked from 'package:purrr':\n#&gt; \n#&gt;     transpose\n\n# load the column list\ncol_types_patent &lt;- list(\n  id = col_character(),\n  date = col_date(\"%Y-%m-%d\"),\n  num_claims = col_double()\n  )\n\ncol_types_patent_asignee &lt;- list(\n  patent_id = col_character(),\n  assignee_id = col_character()\n  )\n\ncol_types_asignee &lt;- list(\n  id = col_character(),\n  type = col_double(),\n  organization = col_character()\n  )\n\ncol_types_uspc &lt;- list(\n  patent_id = col_character(),\n  mainclass_id = col_character(),\n  sequence = col_double()\n  )\n\n#Acquire data from the files\npatent_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/patent.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_patent,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\npatent_asignee_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/patent_assignee.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_patent_asignee,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\nasignee_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/assignee.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_asignee,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\nuspc_tbl &lt;- vroom(\n  file       = \"Patent_data_reduced/uspc.tsv\", \n  delim      = \"\\t\", \n  col_types  = col_types_uspc,\n  na         = c(\"\", \"NA\", \"NULL\")\n  )\n\n#Convert the aquired data to data table\nsetDT(patent_tbl)\nsetDT(patent_asignee_tbl)\nsetDT(asignee_tbl)\nsetDT(uspc_tbl)\n\n#merge asignee data\ncombined_asignee_data &lt;- merge(x=patent_asignee_tbl,y=asignee_tbl,\n                               by.x=\"assignee_id\",\n                               by.y = \"id\",\n                               all.x = TRUE,\n                               all.y = FALSE)"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-10-us-orgs-with-most-patentstype-2-is-for-us-companies",
+    "href": "content/01_journal/03_data_wrangling.html#top-10-us-orgs-with-most-patentstype-2-is-for-us-companies",
+    "title": "Data Wrangling",
+    "section": "1 Top 10 US Orgs with most patents#type 2 is for US Companies",
+    "text": "1 Top 10 US Orgs with most patents#type 2 is for US Companies\n\n#Top 10 US Orgs with most patents#type 2 is for US Companies\ncombined_asignee_data[type==2,.N,by=organization][order( \n  N,decreasing = TRUE)]%&gt;% \n  slice(1:10)"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#us-orgs-with-most-patents-in-aug-2014",
+    "href": "content/01_journal/03_data_wrangling.html#us-orgs-with-most-patents-in-aug-2014",
+    "title": "Data Wrangling",
+    "section": "2 US Orgs with most patents in Aug 2014",
+    "text": "2 US Orgs with most patents in Aug 2014\n\ncombined_patent_data &lt;- merge(x=patent_tbl,y=combined_asignee_data,\n                              by.x = \"id\",\n                              by.y = \"patent_id\",\n                              all.x = TRUE,\n                              all.y = FALSE) %&gt;% filter(!is.na(assignee_id))\n\n\nsetnames(combined_patent_data,\"date\",\"GrantDate\")\n\n\n#US Orgs with most patents in Aug 2014\nMostPatentsAugust14 &lt;- combined_patent_data[month(GrantDate)==8 & type==2,.N,by=organization][order(\n  N,decreasing = TRUE)] %&gt;% head(1)\nMostPatentsAugust14"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-10-companies-with-most-new-patents-august-2014",
+    "href": "content/01_journal/03_data_wrangling.html#top-10-companies-with-most-new-patents-august-2014",
+    "title": "Data Wrangling",
+    "section": "3 Top 10 Companies with Most New Patents August 2014",
+    "text": "3 Top 10 Companies with Most New Patents August 2014\n\nT10_Latest_patents &lt;- combined_patent_data[month(GrantDate)==8&type==2,.N,by=.(GrantDate,organization)][order(GrantDate,N,decreasing = TRUE)] %&gt;% \n  slice(1:10)\nT10_Latest_patents"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#most-innovative-tech-sector",
+    "href": "content/01_journal/03_data_wrangling.html#most-innovative-tech-sector",
+    "title": "Data Wrangling",
+    "section": "4 Most Innovative Tech Sector",
+    "text": "4 Most Innovative Tech Sector\nHere I have given the Class ID of the most innovative Tech Sector\n\n#combine uspc_tbl with asignee_tbl and patent_asignee_tbl\nuspc_combined &lt;- merge(x=uspc_tbl,y=combined_asignee_data,\n                       by=\"patent_id\",\n                       all.x=TRUE,\n                       all.y = FALSE)  %&gt;% filter(!is.na(assignee_id))  \n#most innovative tech category is the class with most patents\nmost_innovative &lt;- uspc_combined[,.N,by=mainclass_id][order(N,decreasing = TRUE)] %&gt;% head(1)\nmost_innovative"
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-10-orgs-with-the-most-patents-worldwide",
+    "href": "content/01_journal/03_data_wrangling.html#top-10-orgs-with-the-most-patents-worldwide",
+    "title": "Data Wrangling",
+    "section": "5 Top 10 orgs with the most patents worldwide",
+    "text": "5 Top 10 orgs with the most patents worldwide\n\n#top 10 orgs with the most patents\ntop10Worldwide &lt;- uspc_combined[type==3|type==2,.N,by=.(organization)][order(N,decreasing = TRUE)] %&gt;% slice(1:10)\ntop10Worldwide\n\n\n\n  \n\n\n#vector of the top 10 orgs\ntop10orgs &lt;-top10Worldwide %&gt;%  pull(organization)\ntop10orgs\n\n#&gt;  [1] \"International Business Machines Corporation\"\n#&gt;  [2] \"Samsung Electronics Co., Ltd.\"              \n#&gt;  [3] \"Canon Kabushiki Kaisha\"                     \n#&gt;  [4] \"Sony Corporation\"                           \n#&gt;  [5] \"QUALCOMM Incorporated\"                      \n#&gt;  [6] \"Microsoft Corporation\"                      \n#&gt;  [7] \"Kabushiki Kaisha Toshiba\"                   \n#&gt;  [8] \"Google Inc.\"                                \n#&gt;  [9] \"LG Electronics Inc.\"                        \n#&gt; [10] \"Panasonic Corporation\""
+  },
+  {
+    "objectID": "content/01_journal/03_data_wrangling.html#top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide",
+    "href": "content/01_journal/03_data_wrangling.html#top-5-uspto-tech-main-classes-for-the-top-10-companies-worldwide",
+    "title": "Data Wrangling",
+    "section": "6 top 5 USPTO tech main classes for the top 10 companies worldwide",
+    "text": "6 top 5 USPTO tech main classes for the top 10 companies worldwide\n\n#the classes of the the top 10 orgs\nuspc_combined[ifelse(organization %in% top10orgs,TRUE,FALSE),.N,by=mainclass_id][order(N,decreasing = TRUE)] %&gt;% \n  slice(1:5)"
   },
   {
     "objectID": "content/01_journal/01_tidyverse.html",

@@ -1,0 +1,118 @@
+#load the tables
+
+library(tidyverse)
+library(vroom)
+library(lubridate)
+library(data.table)
+
+# load the column list
+col_types_patent <- list(
+  id = col_character(),
+  date = col_date("%Y-%m-%d"),
+  num_claims = col_double()
+  )
+
+col_types_patent_asignee <- list(
+  patent_id = col_character(),
+  assignee_id = col_character()
+  )
+
+col_types_asignee <- list(
+  id = col_character(),
+  type = col_double(),
+  organization = col_character()
+  )
+
+col_types_uspc <- list(
+  patent_id = col_character(),
+  mainclass_id = col_character(),
+  sequence = col_double()
+  )
+
+#Acquire data from the files
+patent_tbl <- vroom(
+  file       = "Patent_data_reduced/patent.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_patent,
+  na         = c("", "NA", "NULL")
+  )
+
+patent_asignee_tbl <- vroom(
+  file       = "Patent_data_reduced/patent_assignee.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_patent_asignee,
+  na         = c("", "NA", "NULL")
+  )
+
+asignee_tbl <- vroom(
+  file       = "Patent_data_reduced/assignee.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_asignee,
+  na         = c("", "NA", "NULL")
+  )
+
+uspc_tbl <- vroom(
+  file       = "Patent_data_reduced/uspc.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_uspc,
+  na         = c("", "NA", "NULL")
+  )
+
+#Convert the aquired data to data table
+setDT(patent_tbl)
+setDT(patent_asignee_tbl)
+setDT(asignee_tbl)
+setDT(uspc_tbl)
+
+#merge asignee data
+combined_asignee_data <- merge(x=patent_asignee_tbl,y=asignee_tbl,
+                               by.x="assignee_id",
+                               by.y = "id",
+                               all.x = TRUE,
+                               all.y = FALSE)
+
+#Top 10 US Orgs with most patents#type 2 is for US Companies
+combined_asignee_data[type==2,.N,by=organization][order( 
+  N,decreasing = TRUE)]%>% 
+  slice(1:10)
+
+#combine patent data with asignee_tbl data and patent_asignee_tbl
+combined_patent_data <- merge(x=patent_tbl,y=combined_asignee_data,
+                              by.x = "id",
+                              by.y = "patent_id",
+                              all.x = TRUE,
+                              all.y = FALSE) %>% filter(!is.na(assignee_id))
+
+
+setnames(combined_patent_data,"date","GrantDate")
+#top 10 US companies with most new patents in August 2014
+combined_patent_data[month(GrantDate)==8 & type==2,.N,by=organization][order(
+  N,decreasing = TRUE)] %>% head(10)
+#US Orgs with most patents in Aug 2014
+MostPatentsAugust14 <- combined_patent_data[month(GrantDate)==8 & type==2,.N,by=organization][order(
+  N,decreasing = TRUE)] %>% head(1)
+MostPatentsAugust14
+
+
+T10_Latest_patents <- combined_patent_data[month(GrantDate)==8&type==2,.N,by=.(GrantDate,organization)][order(GrantDate,N,decreasing = TRUE)] %>% 
+  slice(1:10)
+T10_Latest_patents
+#combine uspc_tbl with asignee_tbl and patent_asignee_tbl
+uspc_combined <- merge(x=uspc_tbl,y=combined_asignee_data,
+                       by="patent_id",
+                       all.x=TRUE,
+                       all.y = FALSE)  %>% filter(!is.na(assignee_id))  
+#most innovative tech category is the class with most patents
+most_innovative <- uspc_combined[,.N,by=mainclass_id][order(N,decreasing = TRUE)] %>% head(1)
+most_innovative
+#top 10 orgs with the most patents
+top10Worldwide <- uspc_combined[type==3|type==2,.N,by=.(organization)][order(N,decreasing = TRUE)] %>% slice(1:10)
+top10Worldwide
+#vector of the top 10 orgs
+top10orgs <-top10Worldwide %>%  pull(organization)
+top10orgs
+
+#the classes of the the top 10 orgs
+uspc_combined[ifelse(organization %in% top10orgs,TRUE,FALSE),.N,by=mainclass_id][order(N,decreasing = TRUE)] %>% 
+  slice(1:5)
+
