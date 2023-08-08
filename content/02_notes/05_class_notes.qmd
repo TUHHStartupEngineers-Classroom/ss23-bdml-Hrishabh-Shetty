@@ -1,4 +1,4 @@
 ---
 title: "Class Notes"
-author: "Hrishabh"
+author: "Hrishabh Shetty"
 ---
