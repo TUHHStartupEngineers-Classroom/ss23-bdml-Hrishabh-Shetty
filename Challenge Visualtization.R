@@ -1,27 +1,7 @@
----
-title: "Data Visualization"
-author: "Joschka Schwarz"
----
-
-::: callout-note
-Visualization
-:::
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
-```
-
-
-# Data Visualization Challenge
-
-Last compiled: `r Sys.Date()`
-
-## Case 1: Cumulative Cases Vs. Time
-
-```{r}
 library(tidyverse)
 library(lubridate)
 library(glue)
+install.packages("ggrepel")
 library(ggrepel)
 covid_data_tbl <- read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
 countries <- c("Germany","United Kingdom","France","Spain","United States","Europe")
@@ -57,11 +37,7 @@ cumulative_cases_tbl %>%
     fill = "location",
     caption = "Europe Bypassed US in number of cumulative cases in the second half of 2020"
   ) 
-```
-
-## Case 2: Mortality Rate
-
-```{r} 
+ 
 # Case 2
 #Lat and Longitude Data for world
 world <- map_data("world")
@@ -94,6 +70,4 @@ labs(
   fill = "mortality_rate",
   caption = max(covid_data_tbl$date)
 ) 
-
-```
 
