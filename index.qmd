@@ -21,7 +21,7 @@ This is a template example for lab journaling. Students in the data science cour
 5. Make sure to render you website everytime before you want to upload changes
 
 ```{r}
-#| eval: false
+#| echo: true
 numbers <- 1:1000
 
 # This will print the first 10 elements of the vector numbers

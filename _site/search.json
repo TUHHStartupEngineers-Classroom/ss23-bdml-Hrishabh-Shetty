@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "My Lab Journal",
     "section": "",
-    "text": "This is a template example for lab journaling. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. Students can replace this text as they wish.\n\nHow to use\n\nAccept the assignment and get your own github repo.\nBlog/journal what you are doing in R, by editing the .qmd files.\nSee the links page for lots of helpful links on learning R.\nChange everything to make it your own.\nMake sure to render you website everytime before you want to upload changes\n\n\nnumbers &lt;- 1:1000\n\n# This will print the first 10 elements of the vector numbers\nnumbers[1:10]\n\n# This will plot a histogram of 100 random elements of the vector numbers\nhist(sample(numbers, 100, replace = T))"
+    "text": "This is a template example for lab journaling. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. Students can replace this text as they wish.\n\nHow to use\n\nAccept the assignment and get your own github repo.\nBlog/journal what you are doing in R, by editing the .qmd files.\nSee the links page for lots of helpful links on learning R.\nChange everything to make it your own.\nMake sure to render you website everytime before you want to upload changes\n\n\nnumbers &lt;- 1:1000\n\n# This will print the first 10 elements of the vector numbers\nnumbers[1:10]\n\n [1]  1  2  3  4  5  6  7  8  9 10\n\n# This will plot a histogram of 100 random elements of the vector numbers\nhist(sample(numbers, 100, replace = T))"
   },
   {
     "objectID": "content/02_notes/05_class_notes.html",
@@ -40,6 +40,13 @@
     "title": "Data Acquisition",
     "section": "",
     "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+  },
+  {
+    "objectID": "content/01_journal/02_data_acquisition.html#top-songs-for-taylor-swift-from-spotify",
+    "href": "content/01_journal/02_data_acquisition.html#top-songs-for-taylor-swift-from-spotify",
+    "title": "Data Acquisition",
+    "section": "1.1 Top Songs for Taylor Swift from Spotify",
+    "text": "1.1 Top Songs for Taylor Swift from Spotify\n\nlibrary(httr)\n#replace this with yours\nclientID = 'a8a4b01d406740f988365684cd610827'\nsecret = 'e63cc9177af64612a0d8445e37635e39'\nresponse = POST(\n  'https://accounts.spotify.com/api/token',\n  accept_json(),\n  authenticate(clientID, secret),\n  body = list(grant_type = 'client_credentials'),\n  encode = 'form',\n  verbose()\n)\nmytoken = content(response)$access_token\nHeaderValue = paste0('Bearer ', mytoken)\n\nalbumID = \"1NAmidJlEaVgA3MpcPFYGq\"\ntrack_URI = paste0('https://api.spotify.com/v1/albums/', albumID,'/tracks')\ntrack_response = GET(url = track_URI, add_headers(Authorization = HeaderValue))\ntracks = content(track_response)\n\nntracks = length(tracks$items)\ntracks_list&lt;-data.frame(\n  name=character(ntracks),\n  id=character(ntracks),\n  artist=character(ntracks),\n  disc_number=numeric(ntracks),\n  track_number=numeric(ntracks),\n  duration_ms=numeric(ntracks),\n  stringsAsFactors=FALSE\n)\n\nfor(i in 1:ntracks){\n  tracks_list[i,]$id &lt;- tracks$items[[i]]$id\n  tracks_list[i,]$name &lt;- tracks$items[[i]]$name\n  tracks_list[i,]$artist &lt;- tracks$items[[i]]$artists[[1]]$name\n  tracks_list[i,]$disc_number &lt;- tracks$items[[i]]$disc_number\n  tracks_list[i,]$track_number &lt;- tracks$items[[i]]$track_number\n  tracks_list[i,]$duration_ms &lt;- tracks$items[[i]]$duration_ms\n}\ntracks_list"
   },
   {
     "objectID": "content/01_journal/04_data_visualization.html",
